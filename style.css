@@ -1298,178 +1298,6 @@ body::before {
 }
 .toast.show { transform: translateX(-50%) translateY(0); }
 
-/* ============================================================
-   RESPONSIVE — Mobile First (Android & iOS)
-   ============================================================ */
-
-/* ── Tablet (≤768px) ── */
-@media (max-width: 768px) {
-  .app { padding: 0 12px 80px; }
-  .header { margin: 0 -12px 20px; padding: 28px 20px 22px; border-radius: 0 0 28px 28px; }
-  .logo-text { font-size: 1.75rem; }
-  .info-panel { grid-template-columns: 1fr 1fr; gap: 10px; }
-  .card { padding: 18px; }
-  .modal { max-width: 96vw; }
-}
-
-/* ── Mobile (≤600px) — ẩn tab bar trên, hiện bottom nav ── */
-@media (max-width: 600px) {
-  /* Ẩn tab bar desktop */
-  .tabs { display: none !important; }
-
-  /* Hiện bottom nav */
-  .mobile-bottom-nav { display: flex; }
-
-  /* Padding bottom để nội dung không bị che bởi bottom nav */
-  .app { padding: 0 12px 90px; }
-
-  /* Header */
-  .header {
-    margin: 0 -12px 16px;
-    padding: 20px 16px 18px;
-    border-radius: 0 0 24px 24px;
-  }
-  .logo-icon { font-size: 2.2rem; }
-  .logo-text { font-size: 1.45rem; }
-  .logo-sub { font-size: .65rem; }
-  .lantern { font-size: 1.3rem; top: 8px; }
-  .tagline { gap: 4px; margin-top: 8px; }
-  .tag-chip { font-size: .68rem; padding: 3px 8px; }
-
-  /* Floating controls — nhỏ hơn, tránh notch */
-  .floating-controls { top: 12px; right: 12px; gap: 8px; }
-  .floating-btn { width: 40px; height: 40px; font-size: 1rem; }
-
-  /* Card */
-  .card { padding: 14px; border-radius: 14px; }
-
-  /* Input */
-  .input-label { font-size: .88rem; }
-  .textarea-fancy { font-size: .95rem; padding: 12px 14px; min-height: 100px; }
-  .input-actions { gap: 6px; flex-wrap: wrap; }
-  .shortcut-hint { display: none; }
-  .btn-primary { padding: 9px 16px; font-size: .85rem; }
-  .btn-lg { padding: 11px 20px; font-size: .9rem; }
-  .btn-ghost { padding: 7px 11px; font-size: .8rem; }
-  .btn-chip { padding: 5px 11px; font-size: .78rem; }
-
-  /* Result */
-  .result-tabs { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-  .rtab { padding: 8px 12px; font-size: .8rem; }
-  .result-box { font-size: 1rem; padding: 13px; }
-  .result-box.chinese-result { font-size: 1.5rem; letter-spacing: 3px; }
-
-  /* Script toggle */
-  .script-toggle { flex-wrap: wrap; gap: 6px; }
-  .toggle-btn { padding: 5px 12px; font-size: .76rem; }
-
-  /* Info panel */
-  .info-panel { grid-template-columns: 1fr; gap: 10px; }
-
-  /* History */
-  .history-item { padding: 12px 13px; }
-
-  /* Modal */
-  .modal-overlay { padding: 12px; align-items: flex-end; }
-  .modal {
-    border-radius: 20px 20px 0 0;
-    max-width: 100%;
-    max-height: 90vh;
-    max-height: 90dvh;
-    overflow: hidden;
-    display: flex; flex-direction: column;
-  }
-  .modal-body { padding: 16px; overflow-y: auto; }
-
-  /* Welcome modal */
-  .welcome-overlay { padding: 0; align-items: flex-end; }
-  .welcome-modal {
-    border-radius: 24px 24px 0 0;
-    max-width: 100%;
-    max-height: 92vh;
-    max-height: 92dvh;
-    overflow: hidden;
-    display: flex; flex-direction: column;
-  }
-  .welcome-header { padding: 20px 16px 16px; }
-  .welcome-title { font-size: 1.3rem; }
-  .welcome-body { padding: 12px 14px; overflow-y: auto; }
-  .welcome-footer { padding: 12px 14px 20px; flex-wrap: wrap; }
-  .author-badge { margin: 12px 14px 0; }
-  .steps { gap: 8px; }
-  .step { padding: 10px 12px; }
-
-  /* Upload zone */
-  .upload-zone { padding: 32px 16px; }
-  .upload-icon-wrap { font-size: 2.2rem; }
-  .upload-title { font-size: 1rem; }
-
-  /* OCR actions */
-  .ocr-actions { margin: 12px 0; }
-
-  /* Toast — tránh bottom nav */
-  .toast { bottom: 90px; }
-}
-
-/* ── Small phones (≤390px — iPhone SE, nhỏ hơn) ── */
-@media (max-width: 390px) {
-  .logo-text { font-size: 1.25rem; }
-  .logo-icon { font-size: 1.9rem; }
-  .tag-chip { display: none; }
-  .tag-chip:nth-child(-n+2) { display: inline-flex; }
-  .card { padding: 12px; }
-  .textarea-fancy { font-size: .9rem; }
-  .mbn-label { font-size: .6rem; }
-  .mbn-icon { font-size: 1.2rem; }
-}
-
-/* ── iOS Safe Area (notch, Dynamic Island, home indicator) ── */
-@supports (padding: env(safe-area-inset-bottom)) {
-  .mobile-bottom-nav {
-    padding-bottom: calc(10px + env(safe-area-inset-bottom));
-    height: calc(62px + env(safe-area-inset-bottom));
-  }
-  .app {
-    padding-left: max(12px, env(safe-area-inset-left));
-    padding-right: max(12px, env(safe-area-inset-right));
-  }
-  @media (max-width: 600px) {
-    .app { padding-bottom: calc(90px + env(safe-area-inset-bottom)); }
-    .toast { bottom: calc(90px + env(safe-area-inset-bottom)); }
-    .header {
-      padding-top: max(20px, calc(env(safe-area-inset-top) + 12px));
-    }
-  }
-}
-
-/* ── Touch device optimizations ── */
-@media (hover: none) and (pointer: coarse) {
-  /* Tăng touch target */
-  .btn-primary, .btn-ghost, .btn-chip { min-height: 44px; }
-  .btn-icon { min-width: 40px; min-height: 40px; padding: 8px 12px; }
-  .tab { min-height: 44px; }
-  .rtab { padding: 10px 14px; min-height: 40px; }
-
-  /* Bỏ hover effects trên touch */
-  .card-glow:hover { transform: none; }
-  .history-item:hover { transform: none; }
-  .btn-primary:hover { transform: none; }
-  .btn-ghost:hover { transform: none; }
-  .btn-chip:hover { transform: none; }
-
-  /* Active states thay thế hover */
-  .btn-primary:active { transform: scale(0.96); opacity: 0.9; }
-  .btn-ghost:active   { transform: scale(0.96); }
-  .btn-chip:active    { transform: scale(0.96); }
-  .history-item:active { background: rgba(211,47,47,0.08); }
-
-  /* Tắt text selection trên buttons */
-  button { -webkit-user-select: none; user-select: none; }
-
-  /* Smooth scroll */
-  .result-tabs, .modal-body, .welcome-modal { -webkit-overflow-scrolling: touch; }
-}
-
 /* ===== MOBILE BOTTOM NAV ===== */
 .mobile-bottom-nav {
   display: none;
@@ -1827,7 +1655,180 @@ body::before {
 }
 .dont-show-again:hover { color: var(--text-2); }
 
-/* ── Mobile overrides ── */
+
+/* ============================================================
+   RESPONSIVE — Mobile First (Android & iOS)
+   ============================================================ */
+
+/* ── Tablet (≤768px) ── */
+@media (max-width: 768px) {
+  .app { padding: 0 12px 80px; }
+  .header { margin: 0 -12px 20px; padding: 28px 20px 22px; border-radius: 0 0 28px 28px; }
+  .logo-text { font-size: 1.75rem; }
+  .info-panel { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .card { padding: 18px; }
+  .modal { max-width: 96vw; }
+}
+
+/* ── Mobile (≤600px) — ẩn tab bar trên, hiện bottom nav ── */
+@media (max-width: 600px) {
+  /* Ẩn tab bar desktop */
+  .tabs { display: none !important; }
+
+  /* Hiện bottom nav */
+  .mobile-bottom-nav { display: flex; }
+
+  /* Padding bottom để nội dung không bị che bởi bottom nav */
+  .app { padding: 0 12px 90px; }
+
+  /* Header */
+  .header {
+    margin: 0 -12px 16px;
+    padding: 20px 16px 18px;
+    border-radius: 0 0 24px 24px;
+  }
+  .logo-icon { font-size: 2.2rem; }
+  .logo-text { font-size: 1.45rem; }
+  .logo-sub { font-size: .65rem; }
+  .lantern { font-size: 1.3rem; top: 8px; }
+  .tagline { gap: 4px; margin-top: 8px; }
+  .tag-chip { font-size: .68rem; padding: 3px 8px; }
+
+  /* Floating controls — nhỏ hơn, tránh notch */
+  .floating-controls { top: 12px; right: 12px; gap: 8px; }
+  .floating-btn { width: 40px; height: 40px; font-size: 1rem; }
+
+  /* Card */
+  .card { padding: 14px; border-radius: 14px; }
+
+  /* Input */
+  .input-label { font-size: .88rem; }
+  .textarea-fancy { font-size: .95rem; padding: 12px 14px; min-height: 100px; }
+  .input-actions { gap: 6px; flex-wrap: wrap; }
+  .shortcut-hint { display: none; }
+  .btn-primary { padding: 9px 16px; font-size: .85rem; }
+  .btn-lg { padding: 11px 20px; font-size: .9rem; }
+  .btn-ghost { padding: 7px 11px; font-size: .8rem; }
+  .btn-chip { padding: 5px 11px; font-size: .78rem; }
+
+  /* Result */
+  .result-tabs { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .rtab { padding: 8px 12px; font-size: .8rem; }
+  .result-box { font-size: 1rem; padding: 13px; }
+  .result-box.chinese-result { font-size: 1.5rem; letter-spacing: 3px; }
+
+  /* Script toggle */
+  .script-toggle { flex-wrap: wrap; gap: 6px; }
+  .toggle-btn { padding: 5px 12px; font-size: .76rem; }
+
+  /* Info panel */
+  .info-panel { grid-template-columns: 1fr; gap: 10px; }
+
+  /* History */
+  .history-item { padding: 12px 13px; }
+
+  /* Modal */
+  .modal-overlay { padding: 12px; align-items: flex-end; }
+  .modal {
+    border-radius: 20px 20px 0 0;
+    max-width: 100%;
+    max-height: 90vh;
+    max-height: 90dvh;
+    overflow: hidden;
+    display: flex; flex-direction: column;
+  }
+  .modal-body { padding: 16px; overflow-y: auto; }
+
+  /* Welcome modal */
+  .welcome-overlay { padding: 0; align-items: flex-end; }
+  .welcome-modal {
+    border-radius: 24px 24px 0 0;
+    max-width: 100%;
+    max-height: 92vh;
+    max-height: 92dvh;
+    overflow: hidden;
+    display: flex; flex-direction: column;
+  }
+  .welcome-header { padding: 20px 16px 16px; }
+  .welcome-title { font-size: 1.3rem; }
+  .welcome-body { padding: 12px 14px; overflow-y: auto; }
+  .welcome-footer { padding: 12px 14px 20px; flex-wrap: wrap; }
+  .author-badge { margin: 12px 14px 0; }
+  .steps { gap: 8px; }
+  .step { padding: 10px 12px; }
+
+  /* Upload zone */
+  .upload-zone { padding: 32px 16px; }
+  .upload-icon-wrap { font-size: 2.2rem; }
+  .upload-title { font-size: 1rem; }
+
+  /* OCR actions */
+  .ocr-actions { margin: 12px 0; }
+
+  /* Toast — tránh bottom nav */
+  .toast { bottom: 90px; }
+}
+
+/* ── Small phones (≤390px — iPhone SE, nhỏ hơn) ── */
+@media (max-width: 390px) {
+  .logo-text { font-size: 1.25rem; }
+  .logo-icon { font-size: 1.9rem; }
+  .tag-chip { display: none; }
+  .tag-chip:nth-child(-n+2) { display: inline-flex; }
+  .card { padding: 12px; }
+  .textarea-fancy { font-size: .9rem; }
+  .mbn-label { font-size: .6rem; }
+  .mbn-icon { font-size: 1.2rem; }
+}
+
+/* ── iOS Safe Area (notch, Dynamic Island, home indicator) ── */
+@supports (padding: env(safe-area-inset-bottom)) {
+  .mobile-bottom-nav {
+    padding-bottom: calc(10px + env(safe-area-inset-bottom));
+    height: calc(62px + env(safe-area-inset-bottom));
+  }
+  .app {
+    padding-left: max(12px, env(safe-area-inset-left));
+    padding-right: max(12px, env(safe-area-inset-right));
+  }
+  @media (max-width: 600px) {
+    .app { padding-bottom: calc(90px + env(safe-area-inset-bottom)); }
+    .toast { bottom: calc(90px + env(safe-area-inset-bottom)); }
+    .header {
+      padding-top: max(20px, calc(env(safe-area-inset-top) + 12px));
+    }
+  }
+}
+
+/* ── Touch device optimizations ── */
+@media (hover: none) and (pointer: coarse) {
+  /* Tăng touch target */
+  .btn-primary, .btn-ghost, .btn-chip { min-height: 44px; }
+  .btn-icon { min-width: 40px; min-height: 40px; padding: 8px 12px; }
+  .tab { min-height: 44px; }
+  .rtab { padding: 10px 14px; min-height: 40px; }
+
+  /* Bỏ hover effects trên touch */
+  .card-glow:hover { transform: none; }
+  .history-item:hover { transform: none; }
+  .btn-primary:hover { transform: none; }
+  .btn-ghost:hover { transform: none; }
+  .btn-chip:hover { transform: none; }
+
+  /* Active states thay thế hover */
+  .btn-primary:active { transform: scale(0.96); opacity: 0.9; }
+  .btn-ghost:active   { transform: scale(0.96); }
+  .btn-chip:active    { transform: scale(0.96); }
+  .history-item:active { background: rgba(211,47,47,0.08); }
+
+  /* Tắt text selection trên buttons */
+  button { -webkit-user-select: none; user-select: none; }
+
+  /* Smooth scroll */
+  .result-tabs, .modal-body, .welcome-modal { -webkit-overflow-scrolling: touch; }
+}
+
+/* ── Mobile overrides for welcome modal ── */
 @media (max-width: 600px) {
   .welcome-overlay {
     padding: 0;
