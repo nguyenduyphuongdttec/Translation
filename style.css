@@ -44,6 +44,7 @@
   --shadow-lg:  0 16px 48px rgba(42, 36, 33, 0.2);
   --font:       'Be Vietnam Pro', 'Segoe UI', system-ui, sans-serif;
   --transition: .3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  --modal-bg:   rgba(253, 252, 249, 0.95);
 }
 
 /* ===== DARK MODE ===== */
@@ -61,6 +62,7 @@
   --shadow-md:  0 10px 36px rgba(0, 0, 0, 0.7);
   --shadow-lg:  0 20px 60px rgba(0, 0, 0, 0.85);
   --red-glow:   rgba(211, 47, 47, 0.5);
+  --modal-bg:   rgba(36, 18, 18, 0.95);
 }
 
 /* ===== BASE ===== */
@@ -1067,7 +1069,7 @@ body::before {
 }
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 .modal {
-  background: var(--lg-bg);
+  background: var(--modal-bg);
   backdrop-filter: blur(40px) saturate(240%);
   -webkit-backdrop-filter: blur(40px) saturate(240%);
   border-radius: 20px;
@@ -1078,6 +1080,18 @@ body::before {
     inset 0 1px 0 var(--lg-shine);
   width: 100%; max-width: 480px;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 32px);
+  max-height: calc(100dvh - 32px);
+}
+.modal-body {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  flex: 1;
+}
+.modal-header, .modal-footer {
+  flex-shrink: 0;
 }
 .animate-modal { animation: modalIn .3s cubic-bezier(.34,1.56,.64,1); }
 @keyframes modalIn {
@@ -1361,9 +1375,11 @@ body::before {
     border-radius: 20px 20px 0 0;
     max-width: 100%;
     max-height: 90vh;
-    overflow-y: auto;
+    max-height: 90dvh;
+    overflow: hidden;
+    display: flex; flex-direction: column;
   }
-  .modal-body { padding: 16px; }
+  .modal-body { padding: 16px; overflow-y: auto; }
 
   /* Welcome modal */
   .welcome-overlay { padding: 0; align-items: flex-end; }
@@ -1371,11 +1387,13 @@ body::before {
     border-radius: 24px 24px 0 0;
     max-width: 100%;
     max-height: 92vh;
-    overflow-y: auto;
+    max-height: 92dvh;
+    overflow: hidden;
+    display: flex; flex-direction: column;
   }
   .welcome-header { padding: 20px 16px 16px; }
   .welcome-title { font-size: 1.3rem; }
-  .welcome-body { padding: 12px 14px; }
+  .welcome-body { padding: 12px 14px; overflow-y: auto; }
   .welcome-footer { padding: 12px 14px 20px; flex-wrap: wrap; }
   .author-badge { margin: 12px 14px 0; }
   .steps { gap: 8px; }
@@ -1429,7 +1447,7 @@ body::before {
   /* Tăng touch target */
   .btn-primary, .btn-ghost, .btn-chip { min-height: 44px; }
   .btn-icon { min-width: 40px; min-height: 40px; padding: 8px 12px; }
-  .tab, .mbn-item { min-height: 44px; }
+  .tab { min-height: 44px; }
   .rtab { padding: 10px 14px; min-height: 40px; }
 
   /* Bỏ hover effects trên touch */
@@ -1454,7 +1472,7 @@ body::before {
 
 /* ===== MOBILE BOTTOM NAV ===== */
 .mobile-bottom-nav {
-  display: none; /* Ẩn mặc định, chỉ hiện trên mobile */
+  display: none;
   position: fixed;
   bottom: 0; left: 0; right: 0;
   z-index: 100;
@@ -1466,43 +1484,53 @@ body::before {
   box-shadow:
     0 -4px 24px rgba(0,0,0,0.08),
     inset 0 1px 0 var(--lg-shine);
-  padding: 0 4px 10px;
+  padding: 0 0 10px;
   align-items: flex-start;
   justify-content: space-around;
-  gap: 0;
+  /* Quan trọng: không cho overflow */
+  overflow: hidden;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .mbn-item {
   flex: 1;
+  min-width: 0; /* Cho phép shrink */
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 3px;
-  padding: 8px 4px 0;
+  gap: 2px;
+  padding: 8px 2px 0;
   border: none;
   background: transparent;
   cursor: pointer;
   position: relative;
   transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
   -webkit-tap-highlight-color: transparent;
-  min-height: 52px;
+  height: 52px;
+  /* Không dùng min-height để tránh overflow */
 }
 
 .mbn-icon {
-  font-size: 1.35rem;
+  font-size: 1.3rem;
   transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
   display: block;
   line-height: 1;
+  flex-shrink: 0;
 }
 
 .mbn-label {
-  font-size: .65rem;
+  font-size: .6rem;
   font-weight: 700;
   font-family: var(--font);
   color: var(--text-3);
   transition: color 0.2s ease;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+  display: block;
 }
 
 /* Active indicator dot */
@@ -1529,7 +1557,6 @@ body::before {
   opacity: 1;
   transform: translateX(-50%) scale(1);
 }
-
 .mbn-item:active .mbn-icon { transform: scale(0.88); }
 
 /* Pill highlight behind active item */
@@ -1538,9 +1565,9 @@ body::before {
   position: absolute;
   top: 4px;
   left: 50%; transform: translateX(-50%);
-  width: 44px; height: 32px;
+  width: 40px; height: 30px;
   background: rgba(211,47,47,0.10);
-  border-radius: 12px;
+  border-radius: 10px;
   pointer-events: none;
 }
 
@@ -1551,10 +1578,13 @@ body::before {
   z-index: 2000;
   display: flex; align-items: center; justify-content: center;
   padding: 16px;
-  background: rgba(0, 0, 0, 0.45);
+  background: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(12px) saturate(160%);
   -webkit-backdrop-filter: blur(12px) saturate(160%);
   animation: fadeIn .3s ease;
+  /* Cho phép scroll overlay trên iOS nếu cần */
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 .welcome-overlay.hidden {
   opacity: 0;
@@ -1563,8 +1593,14 @@ body::before {
 }
 
 .welcome-modal {
-  width: 100%; max-width: 520px;
-  background: var(--lg-bg);
+  width: 100%;
+  max-width: 480px;
+  /* Giới hạn chiều cao, scroll bên trong */
+  max-height: calc(100vh - 32px);
+  max-height: calc(100dvh - 32px); /* dynamic viewport cho iOS */
+  display: flex;
+  flex-direction: column;
+  background: var(--modal-bg);
   backdrop-filter: blur(40px) saturate(240%);
   -webkit-backdrop-filter: blur(40px) saturate(240%);
   border: 1px solid var(--lg-border);
@@ -1574,12 +1610,14 @@ body::before {
     0 8px 24px rgba(0,0,0,0.10),
     inset 0 1px 0 var(--lg-shine);
   overflow: hidden;
-  animation: welcomeIn 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+  animation: welcomeIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
   position: relative;
+  /* Tự co lại nếu màn hình nhỏ */
+  flex-shrink: 0;
 }
 @keyframes welcomeIn {
-  from { opacity: 0; transform: scale(0.88) translateY(24px); }
-  to   { opacity: 1; transform: scale(1)    translateY(0); }
+  from { opacity: 0; transform: scale(0.9) translateY(20px); }
+  to   { opacity: 1; transform: scale(1)   translateY(0); }
 }
 
 /* Top shimmer line */
@@ -1589,13 +1627,15 @@ body::before {
   height: 1px;
   background: linear-gradient(90deg, transparent, rgba(255,255,255,0.7), transparent);
   pointer-events: none;
+  z-index: 1;
 }
 
-/* ── Header ── */
+/* Header — cố định, không scroll */
 .welcome-header {
   background: linear-gradient(135deg, #c62828 0%, #e53935 50%, #b71c1c 100%);
-  padding: 24px 24px 20px;
+  padding: 20px 20px 16px;
   position: relative; overflow: hidden;
+  flex-shrink: 0;
 }
 .welcome-header::after {
   content: '';
@@ -1606,28 +1646,37 @@ body::before {
   pointer-events: none;
 }
 .welcome-logo {
-  display: flex; align-items: center; gap: 14px;
+  display: flex; align-items: center; gap: 12px;
   position: relative; z-index: 1;
 }
 .welcome-logo-icon {
-  font-size: 2.6rem;
+  font-size: 2.2rem;
   filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
   animation: float 3s ease-in-out infinite;
+  flex-shrink: 0;
 }
 .welcome-title {
-  font-size: 1.6rem; font-weight: 800;
+  font-size: 1.4rem; font-weight: 800;
   color: #fff; letter-spacing: -0.5px; line-height: 1;
 }
 .welcome-subtitle {
-  font-size: .8rem; color: rgba(255,255,255,0.75);
-  margin-top: 4px; font-weight: 500;
+  font-size: .75rem; color: rgba(255,255,255,0.75);
+  margin-top: 3px; font-weight: 500;
+}
+
+/* Phần scroll được */
+.welcome-scroll-area {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  flex: 1;
+  min-height: 0; /* Quan trọng để flex scroll hoạt động */
 }
 
 /* ── Author badge ── */
 .author-badge {
   display: flex; align-items: center; gap: 10px;
-  margin: 16px 20px 0;
-  padding: 10px 14px;
+  margin: 14px 16px 0;
+  padding: 10px 12px;
   background: var(--lg-bg);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
@@ -1636,8 +1685,8 @@ body::before {
   box-shadow: inset 0 1px 0 var(--lg-shine);
 }
 .author-avatar {
-  font-size: 1.6rem;
-  width: 40px; height: 40px;
+  font-size: 1.4rem;
+  width: 36px; height: 36px;
   background: linear-gradient(135deg, rgba(211,47,47,0.15), rgba(212,175,55,0.15));
   border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
@@ -1646,83 +1695,85 @@ body::before {
 }
 .author-info {
   display: flex; flex-direction: column; flex: 1;
+  min-width: 0;
 }
 .author-label {
-  font-size: .7rem; color: var(--text-3); font-weight: 500;
+  font-size: .65rem; color: var(--text-3); font-weight: 500;
   text-transform: uppercase; letter-spacing: 0.5px;
 }
 .author-name {
-  font-size: 1rem; font-weight: 800;
+  font-size: .95rem; font-weight: 800;
   background: linear-gradient(135deg, var(--red), var(--gold));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 .author-tag {
-  font-size: .7rem; font-weight: 700;
+  font-size: .65rem; font-weight: 700;
   background: rgba(211,47,47,0.12);
   color: var(--red);
   border: 1px solid rgba(211,47,47,0.2);
   border-radius: 20px;
-  padding: 3px 10px;
+  padding: 3px 8px;
   white-space: nowrap;
+  flex-shrink: 0;
 }
 
 /* ── Body ── */
 .welcome-body {
-  padding: 16px 20px;
+  padding: 14px 16px;
 }
 .welcome-intro {
-  font-size: .88rem; color: var(--text-2);
-  line-height: 1.6; margin-bottom: 16px;
+  font-size: .84rem; color: var(--text-2);
+  line-height: 1.6; margin-bottom: 14px;
 }
 .welcome-intro strong { color: var(--text); }
 
 /* Steps */
 .steps {
-  display: flex; flex-direction: column; gap: 10px;
-  margin-bottom: 16px;
+  display: flex; flex-direction: column; gap: 8px;
+  margin-bottom: 14px;
 }
 .step {
-  display: flex; align-items: flex-start; gap: 12px;
-  padding: 12px 14px;
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 10px 12px;
   background: var(--lg-bg);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--lg-border);
-  border-radius: 14px;
+  border-radius: 12px;
   box-shadow: inset 0 1px 0 var(--lg-shine);
   transition: all 0.25s ease;
 }
-.step:hover {
+.step:active {
   background: rgba(211,47,47,0.06);
   border-color: rgba(211,47,47,0.2);
-  transform: translateX(3px);
 }
 .step-num {
-  width: 28px; height: 28px;
+  width: 26px; height: 26px;
   background: linear-gradient(135deg, var(--red), var(--red-2));
   color: #fff;
   border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
-  font-size: .8rem; font-weight: 800;
+  font-size: .78rem; font-weight: 800;
   flex-shrink: 0;
-  box-shadow: 0 4px 12px rgba(211,47,47,0.3),
+  box-shadow: 0 3px 8px rgba(211,47,47,0.3),
               inset 0 1px 0 rgba(255,255,255,0.3);
 }
-.step-content { flex: 1; }
+.step-content { flex: 1; min-width: 0; }
 .step-content strong {
-  display: block; font-size: .88rem;
+  display: block; font-size: .84rem;
   color: var(--text); margin-bottom: 2px;
 }
 .step-content p {
-  font-size: .8rem; color: var(--text-2); line-height: 1.5;
+  font-size: .78rem; color: var(--text-2); line-height: 1.5;
 }
 .step-link {
   color: var(--blue); font-weight: 600;
   text-decoration: none;
   border-bottom: 1px dashed var(--blue);
   transition: color 0.2s;
+  word-break: break-all;
 }
 .step-link:hover { color: var(--red); border-color: var(--red); }
 .step-content code {
@@ -1730,29 +1781,40 @@ body::before {
   color: var(--red);
   border: 1px solid rgba(211,47,47,0.2);
   border-radius: 6px;
-  padding: 1px 7px;
-  font-size: .82rem; font-family: monospace;
+  padding: 1px 6px;
+  font-size: .78rem; font-family: monospace;
 }
 
 /* Note */
 .welcome-note {
-  display: flex; gap: 10px; align-items: flex-start;
-  padding: 10px 14px;
+  display: flex; gap: 8px; align-items: flex-start;
+  padding: 10px 12px;
   background: rgba(212,175,55,0.08);
   border: 1px solid rgba(212,175,55,0.25);
   border-radius: 12px;
-  font-size: .8rem; color: var(--text-2); line-height: 1.5;
+  font-size: .78rem; color: var(--text-2); line-height: 1.5;
 }
-.welcome-note span { font-size: 1rem; flex-shrink: 0; margin-top: 1px; }
+.welcome-note span { font-size: .95rem; flex-shrink: 0; margin-top: 1px; }
 .welcome-note strong { color: var(--text); }
 
-/* ── Footer ── */
+/* ── Footer — cố định dưới cùng ── */
 .welcome-footer {
-  padding: 14px 20px 18px;
+  padding: 12px 16px;
+  padding-bottom: max(12px, env(safe-area-inset-bottom, 12px));
   display: flex; align-items: center; justify-content: center;
   border-top: 1px solid var(--lg-border);
-  gap: 12px;
+  flex-shrink: 0;
+  background: var(--lg-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
 }
+.welcome-footer .btn-primary {
+  width: 100%;
+  justify-content: center;
+  font-size: .95rem;
+  padding: 13px 20px;
+}
+
 .dont-show-again {
   display: flex; align-items: center; gap: 7px;
   font-size: .8rem; color: var(--text-3);
@@ -1765,12 +1827,36 @@ body::before {
 }
 .dont-show-again:hover { color: var(--text-2); }
 
-/* Responsive */
-@media (max-width: 540px) {
-  .welcome-modal { border-radius: 20px; }
-  .welcome-header { padding: 18px 16px 16px; }
-  .welcome-title { font-size: 1.3rem; }
-  .welcome-body { padding: 12px 14px; }
-  .welcome-footer { padding: 12px 14px 16px; flex-wrap: wrap; }
+/* ── Mobile overrides ── */
+@media (max-width: 600px) {
+  .welcome-overlay {
+    padding: 0;
+    align-items: flex-end;
+  }
+  .welcome-modal {
+    max-width: 100%;
+    max-height: 92vh;
+    max-height: 92dvh;
+    border-radius: 24px 24px 0 0;
+    /* Slide up từ dưới */
+    animation: welcomeSlideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  @keyframes welcomeSlideUp {
+    from { opacity: 0; transform: translateY(60px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .welcome-header { padding: 16px 16px 14px; }
+  .welcome-logo-icon { font-size: 1.9rem; }
+  .welcome-title { font-size: 1.2rem; }
+  .welcome-subtitle { font-size: .7rem; }
   .author-badge { margin: 12px 14px 0; }
+  .welcome-body { padding: 12px 14px; }
+  .welcome-footer { padding: 10px 14px; padding-bottom: max(14px, env(safe-area-inset-bottom, 14px)); }
+}
+
+@media (max-width: 390px) {
+  .welcome-title { font-size: 1.1rem; }
+  .welcome-intro { font-size: .8rem; }
+  .step-content strong { font-size: .8rem; }
+  .step-content p { font-size: .75rem; }
 }
